@@ -56,10 +56,10 @@ const usersSchema = new mongoose.Schema(
       enum: ["beginner", "intermediate", "advanced"],
       default: null,
     },
-    goals: [{
+    goals: {
       type: String,
       default: []
-    }],
+    },
     health_info: {
       type: String,
       default: null,
@@ -90,6 +90,14 @@ const usersSchema = new mongoose.Schema(
       type: Boolean,
       enum: [true, false],
       default: true,
+    },
+    otp: {
+      type: Number,
+      default: null, // one time password for email verification
+    },
+    otp_expire_time: {
+      type: Date,
+      default: null, // when otp expires
     },
     is_deleted: {
       type: Boolean,
