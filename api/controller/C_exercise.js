@@ -33,75 +33,91 @@ const getExerciseById = async (req, res) => {
 // Search exercises
 const searchExercises = async (req, res) => {
   try {
-    const query = req.params.query;
+    const { query } = req.query;
+    
+    if (!query) {
+      return errorResponse(res, {
+        statusCode: 400,
+        message: 'Search query is required'
+      });
+    }
+
+    const searchRegex = new RegExp(query, 'i');
     const exercises = await Exercise.find({
       $or: [
-        { name: { $regex: query, $options: "i" } },
-        { description: { $regex: query, $options: "i" } },
-        { muscle_groups: { $regex: query, $options: "i" } },
-      ],
-      is_active: true,
+        { name: searchRegex },
+        { category: searchRegex },
+        { equipment: searchRegex },
+        { muscleGroups: searchRegex },
+        { benefits: searchRegex }
+      ]
     });
-    res.json({ success: true, data: exercises });
+
+    return successResponse(res, {
+      message: 'Search completed successfully',
+      data: exercises
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return errorResponse(res, {
+      message: 'Error searching exercises',
+      error
+    });
   }
 };
 
 // Import exercises from Excel file
 const importExercises = async (req, res) => {
   try {
-    const filePath = path.join(
-      __dirname,
-      "../../Workout_Exercise_Expanded_Database.xlsx"
-    );
-
+    const filePath = path.join(__dirname, "../../Workout_Exercise_Expanded_Database.xlsx");
+    
     // Read the Excel file
     const workbook = xlsx.readFile(filePath);
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-
+    
     // Convert Excel data to JSON
     const exercises = xlsx.utils.sheet_to_json(worksheet);
 
     // Transform and validate the data
-    const transformedExercises = exercises.map((exercise) => ({
+    const transformedExercises = exercises.map(exercise => ({
       name: exercise.Name || exercise.name,
       category: exercise.Category || exercise.category,
       equipment: exercise.Equipment || exercise.equipment,
+      difficulty: exercise.Difficulty || exercise.difficulty,
       instructions: exercise.Instructions || exercise.instructions,
-      muscleGroups: (exercise["Muscle Groups"] || exercise.muscleGroups || "")
-        .split(",")
-        .map((group) => group.trim()),
-      videoUrl: exercise["Video URL"] || exercise.videoUrl,
-      imageUrl: exercise["Image URL"] || exercise.imageUrl,
+      muscleGroups: (exercise['Muscle Groups'] || exercise.muscleGroups || '').split(',').map(group => group.trim()),
+      videoUrl: exercise['Video URL'] || exercise.videoUrl,
+      imageUrl: exercise['Image URL'] || exercise.imageUrl,
+      benefits: (exercise.Benefits || exercise.benefits || '').split(',').map(benefit => benefit.trim()),
+      notes: exercise.Notes || exercise.notes
     }));
 
-    console.log(transformedExercises);
-    // return;
-
     // Insert exercises into database
-    const result = await Exercise.insertMany(transformedExercises, {
-      ordered: false,
-    });
+    const result = await Exercise.insertMany(transformedExercises, { ordered: false });
 
-    res.json({
-      success: true,
+    return successResponse(res, {
+      statusCode: 201,
+      message: 'Exercises imported successfully',
       data: {
         totalImported: result.length,
-        exercises: result,
-      },
+        exercises: result
+      }
     });
   } catch (error) {
     // Handle duplicate key errors
     if (error.code === 11000) {
-      res.status(500).json({
-        success: false,
-        message: "Some exercises already exist in the database",
+      return errorResponse(res, {
+        statusCode: 400,
+        message: 'Some exercises already exist in the database',
+        error
       });
     }
 
-    res.status(500).json({ success: false, message: error.message });
+    return errorResponse(res, {
+      statusCode: 500,
+      message: 'Error importing exercises',
+      error
+    });
   }
 };
 
@@ -109,9 +125,15 @@ const importExercises = async (req, res) => {
 const getAllExercises = async (req, res) => {
   try {
     const exercises = await Exercise.find({});
-    res.json({ success: true, data: exercises });
+    return successResponse(res, {
+      message: 'Exercises retrieved successfully',
+      data: exercises
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return errorResponse(res, {
+      message: 'Error retrieving exercises',
+      error
+    });
   }
 };
 

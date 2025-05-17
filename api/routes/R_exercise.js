@@ -11,11 +11,11 @@ const {
 // Get all exercises
 router.get("/", isAuthenticated, getAllExercises);
 
+// Search exercises - This needs to be before the :id route
+router.get("/search", isAuthenticated, searchExercises);
+
 // Get exercise by ID
 router.get("/:id", isAuthenticated, getExerciseById);
-
-// Search exercises
-router.get("/search/:query", isAuthenticated, searchExercises);
 
 // Import exercises from Excel file
 router.post("/import", isAuthenticated, importExercises);
