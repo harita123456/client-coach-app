@@ -4,6 +4,7 @@ mongoose.set("strictQuery", true);
 
 const mongodbConnect = mongoose
   .connect(process.env.MONGODB_URI, {})
+  .connect(process.env.MONGODB_URI, {})
   .then(() => {
     console.log("Successfully connected to database...");
   });
