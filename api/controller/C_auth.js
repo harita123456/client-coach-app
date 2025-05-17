@@ -8,12 +8,12 @@ const { sendOtpCode } = require("../../utils/send_mail");
 // Register
 const register = async (req, res) => {
   try {
-    const { 
-      email_address, 
-      password, 
-      full_name, 
-      user_type, 
-      device_token, 
+    const {
+      email_address,
+      password,
+      full_name,
+      user_type,
+      device_token,
       device_type,
       // Coach specific fields
       credentials,
@@ -27,7 +27,7 @@ const register = async (req, res) => {
       health_info
     } = req.body;
 
-    console.log("body",req.body)
+    console.log("body", req.body)
 
     // Check if user already exists
     const existingUser = await User.findOne({ email_address });
@@ -145,7 +145,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id, role: user.user_type },
       process.env.TOKEN_KEY,
-      { expiresIn: '1h' }
+      // { expiresIn: '1h' }
     );
 
     // Check for existing active session
@@ -244,7 +244,7 @@ const refreshToken = async (req, res) => {
 const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password -refresh_token');
-    
+
     if (!user) {
       return errorRes(res, "User not found");
     }
@@ -417,6 +417,22 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const getClientList = async (req, res) => {
+  try {
+
+    let clientList = await User.find({
+      user_type: "client",
+      is_deleted: false
+    }).select("full_name _id user_type profile_picture")
+    .sort({ createdAt: -1 })
+
+    return successRes(res, "client list retrieved successfully", clientList);
+  } catch (error) {
+    console.error("Get current user error:", error);
+    return errorRes(res, "Internal server error");
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -426,5 +442,6 @@ module.exports = {
   updateProfile,
   forgotPassword,
   verifyOtp,
-  resetPassword
+  resetPassword,
+  getClientList
 }; 

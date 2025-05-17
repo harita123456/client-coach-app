@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthenticated } = require("../middlewares/auth");
+const { isAuthenticated, isCoach } = require("../middlewares/auth");
 const {
   register,
   login,
@@ -10,7 +10,8 @@ const {
   updateProfile,
   forgotPassword,
   verifyOtp,
-  resetPassword
+  resetPassword,
+  getClientList
 } = require("../controller/C_auth");
 
 // Register
@@ -28,6 +29,8 @@ router.post("/refresh", refreshToken);
 // Get current user profile
 router.get("/me", isAuthenticated, getCurrentUser);
 
+router.get("/client_list", isAuthenticated, isCoach, getClientList);
+
 // Update user profile
 router.patch("/me", isAuthenticated, updateProfile);
 
@@ -39,5 +42,6 @@ router.post("/verify-otp", verifyOtp);
 
 // Reset password
 router.post("/reset-password", resetPassword);
+
 
 module.exports = router; 

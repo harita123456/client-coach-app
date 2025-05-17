@@ -7,7 +7,8 @@ const {
   getCoachAssignments,
   updateExerciseCompletion,
   addClientNotes,
-  addCoachFeedback
+  addCoachFeedback,
+  completeWorkout
 } = require("../controller/C_workout_assignment");
 
 // Coach routes
@@ -19,5 +20,6 @@ router.patch("/:assignment_id/feedback", isAuthenticated, isCoach, addCoachFeedb
 router.get("/client", isAuthenticated, getClientAssignments);
 router.patch("/:assignment_id/exercise/:exercise_id", isAuthenticated, updateExerciseCompletion);
 router.patch("/:assignment_id/notes", isAuthenticated, addClientNotes);
+router.patch("/:assignment_id/complete", isAuthenticated, completeWorkout);
 
 module.exports = router; 
