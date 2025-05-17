@@ -5,8 +5,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 const http = require("http");
-const { apiLimiter, authLimiter } = require('./api/middlewares/rate_limiter');
-const errorHandler = require('./api/middlewares/error_handler');
+const { apiLimiter, authLimiter } = require("./api/middlewares/rate_limiter");
+const errorHandler = require("./api/middlewares/error_handler");
 
 app.use(
   cors({
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ limit: "200mb", extended: true }));
 
 let isMaintenanceMode = false;
-  
+
 morgan.token("host", function (req) {
   return req.hostname;
 });
@@ -43,8 +43,8 @@ app.use(
 );
 
 // Apply rate limiting
-app.use('/api/', apiLimiter);
-app.use('/api/auth', authLimiter);
+app.use("/api/", apiLimiter);
+app.use("/api/auth", authLimiter);
 
 // API Routes
 app.use("/api/auth", require("./api/routes/R_auth"));
@@ -88,4 +88,3 @@ app.get("/", (req, res) => {
 server.listen(port, () => {
   console.log(`Server listening at port : ${port}`);
 });
-  
