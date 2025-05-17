@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const workoutExerciseSchema = new mongoose.Schema({
-  exercise: {
+  exercise_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'exercises',
     required: true
@@ -41,11 +41,6 @@ const workoutSchema = new mongoose.Schema(
       ref: 'users',
       required: true
     },
-    client: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-      required: true
-    },
     exercises: [workoutExerciseSchema],
     notes: String,
     status: {
@@ -53,16 +48,6 @@ const workoutSchema = new mongoose.Schema(
       enum: ['assigned', 'in_progress', 'completed'],
       default: 'assigned'
     },
-    assigned_date: {
-      type: Date,
-      default: Date.now
-    },
-    completed_date: {
-      type: Date,
-      default: null
-    },
-    client_notes: String,
-    coach_feedback: String
   },
   { timestamps: true, versionKey: false }
 );

@@ -2,22 +2,22 @@ const express = require("express");
 const router = express.Router();
 const { isAuthenticated, isCoach } = require("../middlewares/auth");
 const {
-  getAllAssignments,
-  getAssignmentById,
-  completeWorkout,
-  addCoachNote
+  assignWorkout,
+  getClientAssignments,
+  getCoachAssignments,
+  updateExerciseCompletion,
+  addClientNotes,
+  addCoachFeedback
 } = require("../controller/C_workout_assignment");
 
-// Get all assignments (filtered by role)
-router.get("/", isAuthenticated, getAllAssignments);
+// Coach routes
+router.post("/", isAuthenticated, isCoach, assignWorkout);
+router.get("/coach", isAuthenticated, isCoach, getCoachAssignments);
+router.patch("/:assignment_id/feedback", isAuthenticated, isCoach, addCoachFeedback);
 
-// Get assignment by ID
-router.get("/:id", isAuthenticated, getAssignmentById);
-
-// Complete workout (Client only)
-router.post("/:id/complete", isAuthenticated, completeWorkout);
-
-// Add coach feedback
-router.patch("/:id/coach-note", isAuthenticated, isCoach, addCoachNote);
+// Client routes
+router.get("/client", isAuthenticated, getClientAssignments);
+router.patch("/:assignment_id/exercise/:exercise_id", isAuthenticated, updateExerciseCompletion);
+router.patch("/:assignment_id/notes", isAuthenticated, addClientNotes);
 
 module.exports = router; 

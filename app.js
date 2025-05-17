@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 const http = require("http");
-const { apiLimiter, authLimiter } = require("./api/middlewares/rate_limiter");
+// const { apiLimiter, authLimiter } = require("./api/middlewares/rate_limiter");
 const errorHandler = require("./api/middlewares/error_handler");
 
 app.use(
@@ -43,14 +43,14 @@ app.use(
 );
 
 // Apply rate limiting
-app.use("/api/", apiLimiter);
-app.use("/api/auth", authLimiter);
+// app.use("/api/", apiLimiter);
+// app.use("/api/auth", authLimiter);
 
 // API Routes
 app.use("/api/auth", require("./api/routes/R_auth"));
 app.use("/api/exercises", require("./api/routes/R_exercise"));
 app.use("/api/workouts", require("./api/routes/R_workout"));
-app.use("/api/assignments", require("./api/routes/R_workout_assignment"));
+app.use("/api/workout-assignments", require("./api/routes/R_workout_assignment"));
 
 // CORS headers
 app.use(function (req, res, next) {

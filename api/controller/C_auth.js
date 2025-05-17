@@ -27,6 +27,8 @@ const register = async (req, res) => {
       health_info
     } = req.body;
 
+    console.log("body",req.body)
+
     // Check if user already exists
     const existingUser = await User.findOne({ email_address });
     if (existingUser) {

@@ -58,7 +58,7 @@ const usersSchema = new mongoose.Schema(
     },
     goals: {
       type: String,
-      default: []
+      default: "null"
     },
     health_info: {
       type: String,

@@ -2,52 +2,72 @@ const mongoose = require("mongoose");
 
 const workoutAssignmentSchema = new mongoose.Schema(
   {
-    workout: {
+    workout_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'workouts',
       required: true
     },
-    client: {
+    coach_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',
       required: true
     },
-    assigned_at: {
+    client_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'users',
+      required: true
+    },
+    assigned_date: {
       type: Date,
       default: Date.now
     },
-    completed_at: {
+    due_date: {
       type: Date,
-      default: null
-    },
-    performance: [{
-      exercise_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'exercises',
-        required: true
-      },
-      sets_completed: [{
-        reps: Number,
-        weight: Number,
-        notes: String
-      }],
-      comments: String
-    }],
-    coach_note: {
-      type: String,
-      default: null
-    },
-    client_note: {
-      type: String,
-      default: null
+      required: true
     },
     status: {
       type: String,
-      enum: ['pending', 'in_progress', 'completed'],
-      default: 'pending'
+      enum: ['assigned', 'in_progress', 'completed'],
+      default: 'assigned'
+    },
+    completion_date: {
+      type: Date
+    },
+    exercises: [{
+      exercise_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Exercise',
+        required: true
+      },
+      sets: String,
+      reps: String,
+      weight: String,
+      rest_time: String,
+      order: String,
+      completed_sets: [{
+        set_number: String,
+        reps_completed: String,
+        weight_used: String,
+        notes: String
+      }],
+      notes: String,
+      is_completed: {
+        type: Boolean,
+        default: false
+      }
+    }],
+    client_notes: String,
+    coach_feedback: String,
+    is_active: {
+      type: Boolean,
+      default: true
+    },
+    is_deleted: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true, versionKey: false }
 );
 
-module.exports = mongoose.model("workout_assignments", workoutAssignmentSchema); 
+module.exports = mongoose.model("WorkoutAssignment", workoutAssignmentSchema); 
