@@ -7,7 +7,10 @@ const {
   logout,
   refreshToken,
   getCurrentUser,
-  updateProfile
+  updateProfile,
+  forgotPassword,
+  verifyOtp,
+  resetPassword
 } = require("../controller/C_auth");
 
 // Register
@@ -17,7 +20,7 @@ router.post("/register", register);
 router.post("/login", login);
 
 // Logout
-router.post("/logout", logout);
+router.post("/logout", isAuthenticated, logout);
 
 // Refresh token
 router.post("/refresh", refreshToken);
@@ -27,5 +30,14 @@ router.get("/me", isAuthenticated, getCurrentUser);
 
 // Update user profile
 router.patch("/me", isAuthenticated, updateProfile);
+
+// Forgot password - Send OTP
+router.post("/forgot-password", forgotPassword);
+
+// Verify OTP
+router.post("/verify-otp", verifyOtp);
+
+// Reset password
+router.post("/reset-password", resetPassword);
 
 module.exports = router; 
