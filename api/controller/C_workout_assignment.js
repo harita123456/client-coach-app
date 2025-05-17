@@ -648,8 +648,8 @@ const updateExerciseCompletion = async (req, res) => {
       return errorRes(res, "Assignment not found");
     }
 
-    // Find and update the exercise
-    const exercise = assignment.exercises.id(exercise_id);
+    // Find and update the exercise using find
+    const exercise = assignment.exercises.find(ex => ex.exercise_id.toString() === exercise_id);
     if (!exercise) {
       return errorRes(res, "Exercise not found in assignment");
     }
