@@ -1,0 +1,351 @@
+{
+  "info": {
+    "name": "Coach-Client Workout App API",
+    "description": "API collection for the Coach-Client Workout Application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email_address\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"full_name\": \"John Doe\",\n    \"user_type\": \"client\",\n    \"device_token\": \"device_token_here\",\n    \"device_type\": \"android\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email_address\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"device_token\": \"device_token_here\",\n    \"device_type\": \"android\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{refresh_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh-token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "refresh-token"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exercises",
+      "item": [
+        {
+          "name": "Get All Exercises",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["api", "exercises"]
+            }
+          }
+        },
+        {
+          "name": "Get Exercise by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/exercises/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "exercises", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "exercise_id_here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Exercises",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/exercises/search?query=push",
+              "host": ["{{base_url}}"],
+              "path": ["api", "exercises", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "push"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workouts",
+      "item": [
+        {
+          "name": "Create Workout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Full Body Workout\",\n    \"notes\": \"Focus on form and controlled movements\",\n    \"exercises\": [\n        {\n            \"exercise_id\": \"exercise_id_here\",\n            \"sets\": 3,\n            \"reps\": 12,\n            \"weight\": 20,\n            \"rest_time\": 60,\n            \"order\": 1\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/workouts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workouts"]
+            }
+          }
+        },
+        {
+          "name": "Get Client Workouts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/workouts/client",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workouts", "client"]
+            }
+          }
+        },
+        {
+          "name": "Get Coach Workouts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/workouts/coach",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workouts", "coach"]
+            }
+          }
+        },
+        {
+          "name": "Get Workout by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/workouts/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workouts", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "workout_id_here"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workout Assignments",
+      "item": [
+        {
+          "name": "Assign Workout to Client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"workout_id\": \"workout_id_here\",\n    \"client_id\": \"client_id_here\",\n    \"assigned_date\": \"2024-03-20T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/assignments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "assignments"]
+            }
+          }
+        },
+        {
+          "name": "Complete Workout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"performance\": [\n        {\n            \"exercise_id\": \"exercise_id_here\",\n            \"sets_completed\": [\n                {\n                    \"reps\": 10,\n                    \"weight\": 20,\n                    \"notes\": \"Felt good\"\n                }\n            ],\n            \"comments\": \"Completed all sets\"\n        }\n    ],\n    \"client_note\": \"Workout was challenging but manageable\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/assignments/:id/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "assignments", ":id", "complete"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "assignment_id_here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Coach Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"feedback\": \"Great job on maintaining form throughout the workout!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/assignments/:id/feedback",
+              "host": ["{{base_url}}"],
+              "path": ["api", "assignments", ":id", "feedback"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "assignment_id_here"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:4500"
+    },
+    {
+      "key": "access_token",
+      "value": "your_access_token_here"
+    },
+    {
+      "key": "refresh_token",
+      "value": "your_refresh_token_here"
+    }
+  ]
+} 
